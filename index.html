@@ -230,6 +230,13 @@
       50%, 100% { opacity: 0; }
     }
 
+    /* On highcontrast.ro the terminal opens in a full-screen layer with the site's "CLOSE ✕" button in the top-right
+       corner. On phones the monitor fills the width, so it starts lower and the button sits in the free space above it
+       (body.in-site is set by the script when the page runs inside the site's iframe). */
+    @media (max-width: 640px) {
+      body.in-site #terminal { padding-top: 4.5rem; }
+    }
+
     /* Custom Scrollbar for Terminal Log */
     #terminalOutput::-webkit-scrollbar {
       width: 4px;
@@ -697,6 +704,7 @@
     //   { hcTerminal: "home" }  -> closes it and goes to the homepage  (commands 1 / reboot / home)
     // Opened on its own (not in an iframe), "home" simply opens highcontrast.ro.
     const IN_SITE = window.parent !== window;
+    if (IN_SITE) document.body.classList.add("in-site");   // phones: room at the top for the site's CLOSE button (CSS above)
     function hcTellSite(action) {
       if (IN_SITE) window.parent.postMessage({ hcTerminal: action }, "*");
       else if (action === "home") window.location.href = "https://www.highcontrast.ro/";
